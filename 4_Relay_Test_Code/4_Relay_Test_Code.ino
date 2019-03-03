@@ -9,10 +9,6 @@ int relay1 = 2;
 int relay2 = 3;
 int relay3 = 4;
 int relay4 = 5;
-int relay5 = 6;
-int relay6 = 7;
-int relay7 = 8;
-int relay8 = 9;
 
 
 void setup() {
@@ -21,10 +17,6 @@ void setup() {
   pinMode(relay2, OUTPUT);
   pinMode(relay3, OUTPUT);
   pinMode(relay4, OUTPUT);
-  pinMode(relay5, OUTPUT);
-  pinMode(relay6, OUTPUT);
-  pinMode(relay7, OUTPUT);
-  pinMode(relay8, OUTPUT);
 
 }
 
