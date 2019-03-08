@@ -66,6 +66,7 @@ class controller:
 
     maxCounter = 120000#1000000
     counter = [0] * 10
+    PWMValue = [0] * 10
 
     Socket = False
 
@@ -142,14 +143,45 @@ class controller:
         for i in range(self.total_control):
             for j in range(int( self.total[i] ) ):
                 if(self.original[i][j] != self.value[i][j] ):
-                    #self.original[i][j] = self.value[i][j]
-                    print "change in val: ",i," and  ",j #index of the values changing
-                    #self.original[i][j] = self.value[i][j]
-                    
-                    
+                    #control mapping:
+                    #analog:
+                        #left-analog:
+                            #x-axis:0
+                            #y-axis:1
+                        #right-analog:
+                            #x-axis:3
+                            #y-axis:4
+                        #left-trigger:
+                            #vertical-axis:2
+                        #right-trigger:
+                            #vertical-axis:5
+                    #digital:
+                        #left-bumper:10
+                        #right-bumper:11
 
-                    # if(abs(self.value[i][j] - self.original[i][j] ) < 1000 ):
+                        #U-D-L-R:
+                            #UP:19
+                            #Down:20
+                            #Left:18
+                            #Right:17
                         
+                        #Y-A-X-B
+                            #Y:9
+                            #A:6
+                            #X:8
+                            #B:7
+                        
+                        #Back-Home-Start
+                            #Back:12
+                            #Home:14
+                            #Start:13
+
+                    #self.original[i][j] = self.value[i][j]
+                    #print "change in val: ",i," and  ",j #index of the values changing
+                    #self.original[i][j] = self.value[i][j]
+                    #print "change in val: ",i," and  ",j #index of the values changing
+                    # if(abs(self.value[i][j] - self.original[i][j] ) < 1000 ):
+                    
                     if(self.value[i][j] > self.original[i][j] ):
                         self.original[i][j] += 1 + abs(self.value[i][j] - self.original[i][j] )/10#math.sqrt(abs(self.original[i][j]-self.value[i][j])+1)
                     elif(self.value[i][j] < self.original[i][j] ):
@@ -159,32 +191,67 @@ class controller:
                     #print  "abs change in val: ", abs(self.value[i][j] - self.original[i][j] ),"value: ",self.original[i][j]
                     
                     #print(j)#prints out value of input being pressed
-                    print(self.value[i][j] )#prints value of input
+
+
+                    #print(self.value[i][j] )#prints value of input
                     if(j == 2):
                         if self.Socket:
                             temp = self.print_command('B',"w",9, self.restrictPWM(self.original[i][j]) ) 
                         else:
                             temp = encode(9,self.restrictPWM(self.original[i][j]) )
+                    
+                    # print(self.value[i][j] )#prints value of input
+                    
+                    # if(j == 2):#left trigger
+                    #     if self.Socket:
+                    #         temp = self.print_command('B',"w",9, self.restrictPWM(self.original[i][j]) ) 
+                    #     else:
+                    #         temp = encode(9,self.restrictPWM(self.original[i][j]) )
+
+
                         
+                    #     myString.append(temp)
+                    # elif(j == 5):#right trigger
+                    #     if self.Socket:
+                    #         temp = self.print_command('B',"w",10, self.restrictPWM(self.original[i][j]) )
+                    #     else:
+                    #         temp = encode(0,self.restrictPWM(self.original[i][j]) )``````````````````````````````````````````````````````````````````````````````````````````````````````````````
+                    #     #print(encode(10, self.restrictPWM(self.value[i][j]) ) )
+                    #     myString.append(temp)
+
+                    if(j==0):#left analog- xaxis
+                        temp = encode(11,self.restrictPWM(self.original[i][j]) )
                         myString.append(temp)
-                    elif(j == 5):
-                        if self.Socket:
-                            temp = self.print_command('B',"w",10, self.restrictPWM(self.original[i][j]) )
-                        else:
-                            temp = encode(10,self.restrictPWM(self.original[i][j]) )
-                        #print(encode(10, self.restrictPWM(self.value[i][j]) ) )
+
+                    elif(j==1):#left analog- yaxis
+                        temp = encode(10,self.restrictPWM(self.original[i][j]) )
                         myString.append(temp)
+
+
+                    elif(j == 20):#dn
+                        temp = encode(13,self.original[0][20])
+                        myString.append(temp)
+                    elif(j == 19):#relay switch up
+                        temp = encode(12,self.original[0][19])
+                        myString.append(temp)
+
+                    elif(j == 18):#relay switch left
+                        temp = encode(8,self.original[0][18])
+                        myString.append(temp)
+                    elif(j == 17):#right
+                        temp = encode(7,self.original[0][17])
+                        myString.append(temp)
+                    
+                    elif(j == 9):#relay switch Y
+                        temp = encode(4,self.original[0][9])
+                        myString.append(temp)
+                    elif(j == 6):#A
+                        temp = encode(2,self.original[0][6])
+                        myString.append(temp)
+
                     elif(j == 14):
-                        #temp = self.print_command('B',"?",00, 0 )
-                        myString.append('?')
-                    #6 and 9 map to A and Y
-                    elif(j == 6):
-                        temp = encode(13,self.original[0][6])
-                        myString.append(temp)
-                    elif(j == 9):
-                        temp = encode(12,self.original[0][9])
-                        myString.append(temp)
-                
+                        myString.append("???")
+                        
                 if(self.value[0][8] == 1):
                     if(self.counter[0] < self.maxCounter):
                         self.counter[0] = self.counter[0]+1
